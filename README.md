@@ -1,107 +1,97 @@
-# BuildOdoo 2026 — Student Freelance/Gig Marketplace
+# 🎓 Student Gig Marketplace — BuildOdoo 2026
 
-**Track:** Track 3 — Open Innovation
-**Event:** Odoo × HW Tech Club BuildOdoo 2026 Hackathon
-**Repo:** https://github.com/NadaK110/T07-tech-larpers-odoo-hwud
+> 🥈 **2nd Place — BuildOdoo 2026**, a 48-hour hackathon hosted by HW Tech Club × Odoo
+> **Track 3: Open Innovation** · Team **Tech Larpers**
 
-## What we're building
+A student freelance marketplace built as a custom **Odoo 19** module. Students can post small gigs (tutoring, design work, errands and more) and apply to gigs posted by others, with AI helping to organize the marketplace and match the right people to the right work.
 
-A platform where students post small gigs (tutoring, design work, errands, etc.) and
-other students apply to them. AI helps organize and improve the marketplace in three
-ways: auto-categorizing gigs, suggesting fair budgets, and scoring how well an applicant
-matches a gig.
+---
 
-## ⚡ Current Status (updated)
+## 💡 The Problem
 
-| Task | Owner(s) | Status |
-|---|---|---|
-| Backend: `gig.posting` model + module setup | Nada | ✅ Done |
-| Backend: `gig.application` model + Applications tab (incl. access control — applicants can't self-approve; only poster can accept/reject) | Nada | ✅ Done |
-| Frontend/Views (list, kanban, search, form polish) | Zuha | ✅ Done |
-| AI: category + budget suggestion | Irina | ✅ Done |
-| AI: applicant-to-gig match scoring | Shayaan | ✅ Done |
-| Presentation / demo prep | Irina | ✅ Done |
-| Sample/demo data + end-to-end testing | **OPEN — needs an owner** | ✅ Done |
+University students often need quick help with tasks like tutoring, design or small errands, and many other students would like to earn some money doing them. Right now, this happens in scattered group chats and word of mouth: gigs get lost, pricing is guesswork, and it's hard to tell which applicant is the best fit.
 
-## Getting started (for teammates joining now)
+## ✨ Our Solution
 
-1. Make sure Odoo is running locally on your own machine (setup guide from before the
-   hackathon). This repo only holds our custom module code, not the Odoo core itself.
+A single platform inside Odoo where students can:
 
-2. Clone this repo:
+- **Post gigs** with a description, budget and deadline
+- **Browse and apply** to gigs posted by other students
+- **Manage applications** and track each gig from start to finish
+
+AI improves the experience at every step:
+
+| AI Feature | What it does |
+|---|---|
+| 🏷️ **Auto-categorization** | Reads the gig description and fills in the right category automatically |
+| 💰 **Budget suggestion** | Suggests a fair budget based on what the gig involves |
+| 🎯 **Match scoring** | Scores how well each applicant fits a gig, so posters can spot strong candidates quickly |
+
+## 🚀 Features
+
+- **Gig management:** create gigs with a title, description, category, budget, deadline and status
+- **Kanban board:** gigs grouped by status, plus a list view with search and filters
+- **Status workflow:** Open → In Progress → Completed (or Cancelled), shown in a status bar on each gig
+- **Applications:** students apply with a message, and every application has a status (Pending / Accepted / Rejected)
+- **Access control:**
+  - Only a gig's poster can accept or reject applications to that gig
+  - Applicants can't approve their own applications
+- **Automation:** accepting an application automatically moves the gig to *In Progress*
+
+## 🔄 How It Works
+
+1. A student posts a gig and describes what they need.
+2. AI fills in the category and suggests a fair budget.
+3. Other students apply with a short message.
+4. AI scores each applicant's match to the gig.
+5. The poster reviews the applicants and accepts the best fit.
+6. The gig moves to *In Progress* and later to *Completed*.
+
+## 🗂️ Data Model
+
+**`gig.posting`**
+
+| Field | Description |
+|---|---|
+| `name` | Gig title |
+| `description` | What the gig involves |
+| `poster_id` | The student who posted it (→ `res.partner`) |
+| `category` | Gig category (AI-suggested) |
+| `budget` | Gig budget (AI-suggested) |
+| `deadline` | Due date |
+| `state` | Open / In Progress / Completed / Cancelled |
+| `application_ids` | Applications received (→ `gig.application`) |
+
+**`gig.application`**
+
+| Field | Description |
+|---|---|
+| `gig_id` | The gig applied to (→ `gig.posting`) |
+| `applicant_id` | The student applying (→ `res.partner`) |
+| `message` | Application message |
+| `status` | Pending / Accepted / Rejected |
+| `match_score` | AI-generated fit score |
+
+## 🛠️ Tech Stack
+
+- **Odoo 19** (custom module)
+- **Python** for models, business logic and AI integration
+- **XML** for views, menus and actions
+- **PostgreSQL**
+- **[AI provider/API used]**
+- **Git & GitHub** for team collaboration
+
+## ⚙️ Installation
+
+**Prerequisites:** a local Odoo 19 setup with PostgreSQL.
+
+1. Clone the repository:
    ```bash
    git clone https://github.com/NadaK110/T07-tech-larpers-odoo-hwud.git
    ```
+2. Add the repository folder to the `addons_path` in your Odoo config.
+3. Set up your AI API key: [describe how the key is configured].
+4. Restart the Odoo server.
+5. In Odoo, enable developer mode, go to **Apps → Update Apps List**, search for **Gig Marketplace** and click **Activate**.
 
-3. Pull the latest before you start working, every time:
-   ```bash
-   git pull --no-rebase
-   ```
-
-4. Our module lives in `gig_marketplace/` (alongside the `estate` and `estate_accounts`
-   reference modules from the intro workshop — those are just examples, not our project).
-
-5. **Don't commit straight to `main` without pulling first.** Always
-   `git pull --no-rebase` before you start editing, and again before you push.
-
-6. ⚠️ **Important — data does NOT sync via git, only code does.** Each of you runs Odoo
-   on your own laptop with your own local database. Gigs/applications you create only
-   exist on your own machine. For the actual demo, we need ONE laptop with all the code
-   pulled in and good sample data created on it — see "Sample/demo data" below.
-
-## What's already working
-
-- Create a gig (title, description, category, budget, deadline, status)
-- Gigs show in a Kanban board grouped by status, plus a list view with filters
-- Opening a gig shows a status bar (Open → In Progress → Completed) and a polished form
-- **AI auto-fills the category** from the gig's description when it's created
-- **AI suggests a fair budget** based on the description
-- Applicants can apply via the Applications tab (applicant, message, status)
-- **AI scores how well an applicant matches a gig**, to help the poster spot good fits
-- Accept/Reject buttons on applications:
-  - An applicant **cannot** accept/reject their own application (blocked with an error)
-  - Only the gig's poster can accept/reject applications to their own gig
-  - Accepting an application automatically moves the gig to "In Progress"
-
-## What's left before submission
-
-**Sample/demo data + testing — OPEN ROLE**
-Whoever picks this up should, on whichever laptop will be used for the actual demo:
-- Pull the latest code from everyone (`git pull --no-rebase`, restart server, Apps →
-  Upgrade)
-- Create 8-10+ realistic gigs across different categories, so the AI category/budget
-  features have real variety to show off
-- Create several applications per gig (using a second test user, not just admin) so the
-  match-scoring and accept/reject flow can be demoed properly
-- Test the full journey end-to-end: post a gig → AI fills category/budget → apply as a
-  different user → check match score → accept as the poster → gig moves to In Progress
-- Flag any bugs found to whoever owns that part
-
-**Presentation (Irina, in progress)**
-- Demo script (aim for 2-3 minutes)
-- Slides: problem, solution, how it works, tech stack, impact
-- Note: presenting itself is a team effort — everyone should be ready to speak to the
-  part they built
-
-## Data model (for reference)
-
-**`gig.posting`**
-- `name`, `description`, `poster_id` (→ res.partner), `category` (AI), `budget` (AI),
-  `deadline`
-- `state`: Open / In Progress / Completed / Cancelled
-- `application_ids` (One2many → gig.application)
-
-**`gig.application`**
-- `gig_id` (→ gig.posting), `applicant_id` (→ res.partner), `message`
-- `status`: Pending / Accepted / Rejected
-- `match_score` (AI) — how well the applicant fits the gig
-
-## Timeline reminders
-
-- **Submission deadline:** Monday 28th September, 12 PM
-- **Presentation:** Wednesday 30th September, 2–4 PM
-
-## Questions or blockers?
-
-Ping the group chat — don't spend more than ~20–30 minutes stuck alone on a setup issue,
-just ask.
+> **Note:** the `estate` and `estate_accounts` folders are reference modules from the Odoo intro workshop and are not part of this project.
