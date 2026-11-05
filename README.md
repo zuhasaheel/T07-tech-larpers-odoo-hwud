@@ -95,3 +95,15 @@ AI improves the experience at every step:
 5. In Odoo, enable developer mode, go to **Apps → Update Apps List**, search for **Gig Marketplace** and click **Activate**.
 
 > **Note:** the `estate` and `estate_accounts` folders are reference modules from the Odoo intro workshop and are not part of this project.
+
+## 👥 Team — Tech Larpers
+
+- Nada
+- Zuha Saheel
+- Irina Koroleva
+- Shayaan Kazi
+- Madiha Ejaz
+
+## 🙏 Acknowledgements
+
+Thank you to **HW Tech Club** and **Odoo** for organizing BuildOdoo 2026, and to our mentors and judges for their support and feedback.
